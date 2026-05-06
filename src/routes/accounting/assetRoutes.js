@@ -7,7 +7,7 @@ const {
   getAssetById,
   updateAsset,
   deleteAsset,
-} = require("../../controllers/generalLedger/assetController");
+} = require("../../controllers/accounting/assetController");
 
 const authenticate = require("../../middlewares/authenticate");
 const { authorize } = require("../../middlewares/authorize");

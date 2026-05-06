@@ -8,7 +8,7 @@ const rateLimit = require("express-rate-limit");
 const connectDB = require("./src/config/db");
 const authRoutes = require("./src/routes/authRoutes");
 const userRoutes = require("./src/routes/userRoutes");
-const assetRoutes = require("./src/routes/generalLedger/assetRoutes");
+const assetRoutes = require("./src/routes/accounting/assetRoutes");
 const { errorHandler, notFound } = require("./src/middlewares/errorHandler");
 
 connectDB();

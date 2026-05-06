@@ -1,4 +1,4 @@
-const Asset = require("../../models/generalLedger/Asset");
+const Asset = require("../../models/accounting/Asset");
 
 const createAsset = async (req, res) => {
   try {
