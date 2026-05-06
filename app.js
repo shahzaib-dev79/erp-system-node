@@ -9,6 +9,8 @@ const connectDB = require("./src/config/db");
 const authRoutes = require("./src/routes/authRoutes");
 const userRoutes = require("./src/routes/userRoutes");
 const assetRoutes = require("./src/routes/accounting/assetRoutes");
+const journalLedgerRoutes = require("./src/routes/accounting/ledgerRoutes");
+
 const { errorHandler, notFound } = require("./src/middlewares/errorHandler");
 
 connectDB();
@@ -46,6 +48,7 @@ app.get("/health", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/accounting/assets", assetRoutes);
+app.use("/api/accounting/ledger", journalLedgerRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
