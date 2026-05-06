@@ -45,7 +45,7 @@ app.get("/health", (req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/general-ledger/assets", assetRoutes);
+app.use("/api/accounting/assets", assetRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
