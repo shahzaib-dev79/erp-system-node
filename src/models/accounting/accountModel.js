@@ -21,5 +21,5 @@ const accountSchema = new mongoose.Schema({
   },
   balance: Number,
 });
-const accountModel = mongoose.model("account", accountModel);
+const accountModel = mongoose.model("account", accountSchema);
 module.exports = accountModel;
