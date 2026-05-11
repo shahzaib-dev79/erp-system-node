@@ -17,9 +17,13 @@ const accountSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ["bank", "mobile-account", "cash"],
+    enum: ["bank", "mobileaccount", "cash"],
   },
-  balance: Number,
+  balance: {
+    type: Number,
+    default: 0,
+    min: 0,
+  },
 });
 
 const accountModel = mongoose.model("account", accountSchema);
