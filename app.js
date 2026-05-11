@@ -14,7 +14,6 @@ const journalLedgerRoutes = require("./src/routes/accounting/ledgerRoutes");
 const { errorHandler, notFound } = require("./src/middlewares/errorHandler");
 
 connectDB();
-
 const app = express();
 
 app.use(helmet()); // Set secure HTTP headers
