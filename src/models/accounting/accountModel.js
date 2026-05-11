@@ -17,9 +17,10 @@ const accountSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ["bank", "mobile account", "cash"],
+    enum: ["bank", "mobile-account", "cash"],
   },
   balance: Number,
 });
+
 const accountModel = mongoose.model("account", accountSchema);
 module.exports = accountModel;
