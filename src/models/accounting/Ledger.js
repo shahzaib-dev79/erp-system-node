@@ -10,13 +10,13 @@ const journalLedgerSchema = new mongoose.Schema(
     },
     accounts: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Asset",
+      ref: "account",
       required: [true, "Account is required"],
     },
     debit: {
       type: Number,
       default: 0,
-      min: [0, "Credit cannot be negative"],
+      min: [0, "Debit cannot be negative"],
     },
     credit: {
       type: Number,
@@ -25,7 +25,7 @@ const journalLedgerSchema = new mongoose.Schema(
     },
     party: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "Party",
       required: [true, "Party is required"],
     },
     type: {
