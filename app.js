@@ -10,6 +10,8 @@ const authRoutes = require("./src/routes/authRoutes");
 const userRoutes = require("./src/routes/userRoutes");
 const assetRoutes = require("./src/routes/accounting/assetRoutes");
 const journalLedgerRoutes = require("./src/routes/accounting/ledgerRoutes");
+const accountRoutes = require("./src/routes/accounting/accountsRoutes");
+const partyRoutes = require("./src/routes/accounting/partyRoutes");
 
 const { errorHandler, notFound } = require("./src/middlewares/errorHandler");
 
@@ -48,6 +50,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/accounting/assets", assetRoutes);
 app.use("/api/accounting/ledger", journalLedgerRoutes);
+app.use("/api/accounting/accounts", accountRoutes);
+app.use("/api/accounting/party", partyRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

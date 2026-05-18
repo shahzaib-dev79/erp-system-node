@@ -1,17 +1,18 @@
 const express = require("express");
 const route = express.Router();
+
 const {
-	createParty,
-	getAllParties,
-	getSingleParty,
-	updateParty,
-	deleteParty,
+  createParty,
+  getAllParties,
+  getSingleParty,
+  updateParty,
+  deleteParty,
 } = require("../../controllers/accounting/partyControllers");
 
-route.post("/");
-route.get("/");
-route.get("/:id");
-route.patch("/:id");
-route.delete("/:id");
+route.post("/", createParty);
+route.get("/", getAllParties);
+route.get("/:id", getSingleParty);
+route.patch("/:id", updateParty);
+route.delete("/:id", deleteParty);
 
-module.exports = rotue;
+module.exports = route;

@@ -1,13 +1,11 @@
 const mongoose = require("mongoose");
-const { kMaxLength } = require("node:buffer");
-const { minLength } = require("zod");
 const partySchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: true,
-      maxLength: 20,
-      unique: [true, "Name already Used Use and other party name"],
+      maxlength: 50,
+      unique: true,
     },
     partyType: {
       type: String,
@@ -17,11 +15,14 @@ const partySchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      minLength: 5,
+      minlength: 5,
+      lowercase: true,
+      trim: true,
     },
     phoneNumber: {
       type: String,
       required: true,
+      trim: true,
     },
     address: {
       type: String,

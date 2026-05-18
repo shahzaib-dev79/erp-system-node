@@ -14,10 +14,12 @@ const accountSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+    trim: true,
   },
+
   type: {
     type: String,
-    enum: ["bank", "mobileaccount", "cash"],
+    enum: ["bank", "mobile-account", "cash"],
   },
   balance: {
     type: Number,
