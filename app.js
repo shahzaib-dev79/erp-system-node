@@ -12,6 +12,7 @@ const assetRoutes = require("./src/routes/accounting/assetRoutes");
 const journalLedgerRoutes = require("./src/routes/accounting/ledgerRoutes");
 const accountRoutes = require("./src/routes/accounting/accountsRoutes");
 const partyRoutes = require("./src/routes/accounting/partyRoutes");
+const productRoutes = require("./src/routes/productRoutes");
 const salesRoutes = require("./src/routes/accounting/salesRoutes");
 
 const { errorHandler, notFound } = require("./src/middlewares/errorHandler");
@@ -53,6 +54,7 @@ app.use("/api/accounting/assets", assetRoutes);
 app.use("/api/accounting/ledger", journalLedgerRoutes);
 app.use("/api/accounting/accounts", accountRoutes);
 app.use("/api/accounting/party", partyRoutes);
+app.use("/api/products", productRoutes);
 app.use("/api/accounting/sales", salesRoutes);
 
 app.use(notFound);
