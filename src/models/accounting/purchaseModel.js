@@ -53,7 +53,7 @@ const purchaseSchema = new mongoose.Schema(
       min: [0, "Due amount cannot be negative"],
     },
     paymentMethod: {
-      type: string,
+      type: String,
       enum: ["cash", "bank", "mobile-account"],
       default: "cash",
     },
