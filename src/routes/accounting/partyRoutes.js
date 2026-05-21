@@ -1,5 +1,4 @@
 const express = require("express");
-const route = express.Router();
 
 const {
   createParty,
@@ -9,10 +8,21 @@ const {
   deleteParty,
 } = require("../../controllers/accounting/partyControllers");
 
-route.post("/", createParty);
-route.get("/", getAllParties);
-route.get("/:id", getSingleParty);
-route.patch("/:id", updateParty);
-route.delete("/:id", deleteParty);
+const authenticate = require("../../middlewares/authenticate");
+const { authorize } = require("../../middlewares/authorize");
 
-module.exports = route;
+const partyRouter = express.Router();
+
+partyRouter.use(authenticate);
+
+partyRouter.post("/", authorize("admin", "moderator"), createParty);
+
+partyRouter.get("/", getAllParties);
+
+partyRouter.get("/:id", getSingleParty);
+
+partyRouter.put("/:id", authorize("admin", "moderator"), updateParty);
+
+partyRouter.delete("/:id", authorize("admin"), deleteParty);
+
+module.exports = partyRouter;
