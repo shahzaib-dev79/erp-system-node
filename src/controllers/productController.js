@@ -105,24 +105,23 @@ const deleteProduct = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const isExist = await checkProduct(id);
-    if (!isExist) {
+    const deletedProduct = await productModel.findByIdAndDelete(id);
+
+    if (!deletedProduct) {
       return res.status(404).json({
         success: false,
         message: "Product not found",
       });
     }
 
-    await productModel.findByIdAndDelete(id);
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
-      msg: "Product deleted successfully!",
-      data: product,
+      message: "Product deleted successfully!",
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      msg: "Error occurred while deleting the party.",
+      message: "Error occurred while deleting product",
       error: error.message,
     });
   }
