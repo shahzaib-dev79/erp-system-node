@@ -30,7 +30,10 @@ const createJournalLedger = async (req, res) => {
 const getAllJournalLedger = async (req, res) => {
   try {
     const entries = await JournalLedger.find({})
-      .populate("accounts", "name category value")
+      .populate(
+        "accounts",
+        "ownerName bankName bankAccountNo type balance",
+      )
       .populate("party", "name email")
       .sort({ createdAt: -1 });
 
@@ -52,7 +55,10 @@ const getJournalLedgerById = async (req, res) => {
   try {
     const { id } = req.params;
     const entry = await JournalLedger.findById(id)
-      .populate("accounts", "name category value")
+      .populate(
+        "accounts",
+        "ownerName bankName bankAccountNo type balance",
+      )
       .populate("party", "name email");
 
     if (!entry) {
