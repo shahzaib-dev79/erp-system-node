@@ -5,6 +5,8 @@ const {
 	verifyRefreshToken,
 } = require("../utils/jwt");
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const register = async (req, res, next) => {
 	try {
 		const { name, email, password } = req.body;
@@ -15,6 +17,12 @@ const register = async (req, res, next) => {
 				.json({ success: false, message: "All fields are required." });
 		}
 
+		if (!EMAIL_REGEX.test(email)) {
+			return res
+				.status(400)
+				.json({ success: false, message: "Invalid email format." });
+		}
+
 		const existingUser = await User.findOne({ email });
 		if (existingUser) {
 			return res
@@ -22,7 +30,10 @@ const register = async (req, res, next) => {
 				.json({ success: false, message: "Email already in use." });
 		}
 
-		const user = await User.create({ name, email, password });
+		const userCount = await User.countDocuments();
+		const role = userCount === 0 ? "admin" : "user";
+
+		const user = await User.create({ name, email, password, role });
 
 		const accessToken = generateAccessToken({ id: user._id, role: user.role });
 		const refreshToken = generateRefreshToken({ id: user._id });
@@ -30,7 +41,7 @@ const register = async (req, res, next) => {
 		user.refreshToken = refreshToken;
 		await user.save({ validateBeforeSave: false });
 
-		res.status(201).json({
+		return res.status(201).json({
 			success: true,
 			message: "Account created successfully.",
 			data: { user: user.toSafeObject(), accessToken, refreshToken },
@@ -50,7 +61,9 @@ const login = async (req, res, next) => {
 				.json({ success: false, message: "Email and password are required." });
 		}
 
-		const user = await User.findOne({ email }).select("+password");
+		const user = await User.findOne({ email }).select(
+			"+password +refreshToken",
+		);
 
 		if (!user || !(await user.comparePassword(password))) {
 			return res
@@ -70,7 +83,7 @@ const login = async (req, res, next) => {
 		user.refreshToken = refreshToken;
 		await user.save({ validateBeforeSave: false });
 
-		res.status(200).json({
+		return res.status(200).json({
 			success: true,
 			message: "Logged in successfully.",
 			data: { user: user.toSafeObject(), accessToken, refreshToken },
@@ -94,10 +107,9 @@ const refresh = async (req, res, next) => {
 		try {
 			decoded = verifyRefreshToken(refreshToken);
 		} catch {
-			return res.status(401).json({
-				success: false,
-				message: "Invalid or expired refresh token.",
-			});
+			return res
+				.status(401)
+				.json({ success: false, message: "Invalid or expired refresh token." });
 		}
 
 		const user = await User.findById(decoded.id).select("+refreshToken");
@@ -106,6 +118,12 @@ const refresh = async (req, res, next) => {
 			return res
 				.status(401)
 				.json({ success: false, message: "Refresh token mismatch." });
+		}
+
+		if (!user.isActive) {
+			return res
+				.status(403)
+				.json({ success: false, message: "Account has been deactivated." });
 		}
 
 		const newAccessToken = generateAccessToken({
@@ -117,7 +135,7 @@ const refresh = async (req, res, next) => {
 		user.refreshToken = newRefreshToken;
 		await user.save({ validateBeforeSave: false });
 
-		res.status(200).json({
+		return res.status(200).json({
 			success: true,
 			data: { accessToken: newAccessToken, refreshToken: newRefreshToken },
 		});
@@ -128,9 +146,13 @@ const refresh = async (req, res, next) => {
 
 const logout = async (req, res, next) => {
 	try {
+		if (!req.user?._id) {
+			return res.status(401).json({ success: false, message: "Unauthorized." });
+		}
+
 		await User.findByIdAndUpdate(req.user._id, { refreshToken: null });
 
-		res
+		return res
 			.status(200)
 			.json({ success: true, message: "Logged out successfully." });
 	} catch (error) {
@@ -138,8 +160,12 @@ const logout = async (req, res, next) => {
 	}
 };
 
-const getMe = async (req, res) => {
-	res.status(200).json({ success: true, data: { user: req.user } });
+const getMe = async (req, res, next) => {
+	try {
+		return res.status(200).json({ success: true, data: { user: req.user } });
+	} catch (error) {
+		next(error);
+	}
 };
 
 module.exports = { register, login, refresh, logout, getMe };
