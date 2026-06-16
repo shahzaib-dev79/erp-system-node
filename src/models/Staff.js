@@ -1,5 +1,4 @@
-const { default: mongoose } = require("mongoose");
-const mongoode = require("mongoose");
+const mongoose = require("mongoose");
 
 const staffSchema = new mongoose.Schema(
   {
